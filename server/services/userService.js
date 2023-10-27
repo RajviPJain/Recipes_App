@@ -56,7 +56,37 @@ class UserService{
        
         
       }
+
+      async updateUser(userdata){
+          console.log(userdata)
+          const user=await UsersRepository.updateUser(userdata)
+          return user
+      }
+
+      async verifyPassword(userdata){
+        const user=await UsersRepository.findUserByEmail(userdata)
+    
+       
+        const hashedpassword=user[0].password
       
+        const isMatch = await bcrypt.compare(userdata.oldPassword, hashedpassword);
+
+        if(isMatch){
+            return 'Verified Password'
+        }
+        else{
+          throw new Error("Password doesn't match")
+        }
+      }
+      
+      async updatePassword(userdata){
+  
+          const newHashedpassword = await bcrypt.hash(userdata.newPassword, 10);
+          const updatedPassword=await UsersRepository.updatePassword(newHashedpassword,userdata.id)
+          return updatedPassword
+     
+       
+      }
 }
 
 module.exports=new UserService()

@@ -22,6 +22,8 @@ userRouter.get(
   
 userRouter.get("/me",isAuthenticated, userController.getUser); //to get my profile
 userRouter.patch("/me", isAuthenticated,userController.updateUser); //to update my profile.
+userRouter.patch("/me/password",isAuthenticated,userController.updatePassword)
+userRouter.post("/me/verify",isAuthenticated,userController.verifyPassword)
 userRouter.get("/logout", userController.logout);
 
 module.exports = userRouter;

@@ -236,7 +236,7 @@ export default {
         }
     },
     async getCategories() {
-      await this.$store.dispatch('category/fetchCategories')
+      
       this.items = this.$store.getters['category/getCategories']
     }
     // async getCategories() {

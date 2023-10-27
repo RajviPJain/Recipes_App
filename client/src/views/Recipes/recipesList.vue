@@ -7,6 +7,7 @@
         class="mx-auto my-4"
         width="350"
         variant="outlined"
+        elevation="16"
       >
         <template v-slot:loader="{ isActive }">
           <v-progress-linear

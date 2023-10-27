@@ -210,7 +210,7 @@ export default {
   },
   methods: {
     async getCategories() {
-      await this.$store.dispatch('category/fetchCategories')
+     
       this.items = this.$store.getters['category/getCategories']
     },
     async getRecipe() {

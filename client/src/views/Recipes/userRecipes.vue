@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" width="1000">
+  <v-card class="mx-auto " width="1000" >
     <v-list-item>
       <template v-slot:prepend>
         <v-avatar
@@ -35,8 +35,8 @@
     <v-divider class="mx-4 mb-1"></v-divider>
     <v-container>
       <v-row dense>
-        <v-col v-for="recipe in userRecipes" :key="recipe.id" col="auto">
-          <v-card variant="outlined" width="400">
+        <v-col v-for="recipe in userRecipes" :key="recipe.id" col="auto" class="d-flex justify-center">
+          <v-card variant="outlined" width="400" elevation="16" class="mb-3">
             <v-list-item class="pa-0" :to="'/recipe/' + recipe.id">
               <v-img
                 :src="recipe.image_url"

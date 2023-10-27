@@ -33,5 +33,17 @@ export default{
 
     registerUser(userdetails){
         return api.post(`users/register`,userdetails)
+    },
+
+    verifyPassword(userdetails){
+        return api.post(`users/me/verify`,userdetails)
+    },
+
+    updatePassword(userdetails){
+        return api.patch(`users/me/password`,userdetails)
+    },
+
+    updateUser(userdetails){
+        return api.patch(`users/me`,userdetails)
     }
 }

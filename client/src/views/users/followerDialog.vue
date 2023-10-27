@@ -45,7 +45,7 @@
                 style="cursor: pointer"
                 @click="removeFollower(item.id)"
               ></v-icon>
-              <v-btn v-else @click="unfollow(item.id)">Unfollow</v-btn></template
+              <v-btn variant="flat" v-else @click="unfollow(item.id)">Unfollow</v-btn></template
             >
           </v-list-item>
 

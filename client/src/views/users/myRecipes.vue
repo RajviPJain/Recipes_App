@@ -3,7 +3,7 @@
    
       <v-row align="center" justify="center">
         <v-col v-for="recipe in userRecipes" :key="recipe.id" cols="auto">
-          <v-card variant="outlined" width="350"  class="mx-auto my-4">
+          <v-card variant="outlined" width="350"  class="mx-auto my-4" elevation="16">
             <v-list-item class="pa-0" :to="'/recipe/' + recipe.id">
               <v-img
                 :src="recipe.image_url"

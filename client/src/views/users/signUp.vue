@@ -55,6 +55,17 @@
               v-model="about"
             ></v-text-field>
           </v-col>
+
+          <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  prepend-inner-icon="mdi-camera"
+                  accept="image/*"
+                  label="Image Url*"
+                  :error-messages="v$.imageurl.$errors.map((e) => e.$message)"
+          v-model="v$.imageurl.$model"
+              @input="v$.imageurl.$touch"
+                ></v-text-field>
+              </v-col>
         </v-row>
 
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
@@ -135,7 +146,7 @@
 
 <script>
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength, sameAs } from "@vuelidate/validators";
+import { required, email, minLength, sameAs,url } from "@vuelidate/validators";
 import userApi from "../../services/users"
 
 export default {
@@ -152,6 +163,7 @@ export default {
     email: "",
     password: "",
     confirmPassword: "",
+    imageurl:""
   }),
   validations() {
     return {
@@ -175,6 +187,9 @@ export default {
       confirmPassword: {
         required,
         sameAs: sameAs(this.password),
+      },
+      imageurl:{
+            url
       },
     };
   },
