@@ -19,8 +19,8 @@ class RecipeService{
         return categories
       }
 
-      async getRecipeByCategory(id){
-        const recipeDetail= await RecipesRepository.getRecipesByCategories(id)
+      async getRecipeByCategory(id,page){
+        const recipeDetail= await RecipesRepository.getRecipesByCategories(id,page)
         return recipeDetail
       }
 

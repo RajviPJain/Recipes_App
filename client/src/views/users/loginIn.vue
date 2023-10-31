@@ -59,7 +59,13 @@
         >
           Log In
         </v-btn>
-
+        
+        <v-btn   block
+          class="mb-4"
+          color="black"
+          size="large"
+          variant="tonal"
+          @click="googleAuth()">Log In with google</v-btn>
         <v-card-text class="text-center">
           <v-btn class="text-black text-decoration-none" to="/signup">
             Sign Up now
@@ -114,7 +120,7 @@ export default {
         };
         try {
           const response = await userApi.login(params);
-
+         
           if (response.status === 200) {
             await this.$store.commit("auth/setLogin");
             this.login = this.$store.getters["auth/getisLogin"];
@@ -132,6 +138,28 @@ export default {
         }
       }
     },
+
+    async googleAuth(){
+       try{
+           const response=await userApi.googleAuth()
+           window.location.href = response.data.authUrl;
+           if (response.status === 200) {
+            await this.$store.commit("auth/setLogin");
+            this.login = this.$store.getters["auth/getisLogin"];
+            // localStorage.setItem('isLogin',true)
+            this.$store.commit({
+              type: "auth/setUser",
+              value: response.data.user.id,
+            });
+            this.user = this.$store.getters["auth/getUserId"];
+
+            this.$router.push({ path: "/" });
+          }
+       }
+       catch(error){
+          console.log(error)
+       }
+    }
   },
 };
 </script>

@@ -9,7 +9,7 @@ class UserRecipeController {
       return res.status(200).json(recipesDetails);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ message:error });
+      return res.status(500).send('Internal Server Error');
     }
   }
   async postRecipe(req, res) {
@@ -19,10 +19,10 @@ class UserRecipeController {
         req.body.recipe,
         req.user.id
       );
-      return res.status(200).json(recipe);
+      return res.status(200).json('Posted Successfully');
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
   async updateRecipe(req, res) {
@@ -32,12 +32,12 @@ class UserRecipeController {
           req.params.recipe_id,
           req.body.recipe_details
         );
-       return res.status(200).send({ message: "updated Successfully", updatedRecipe });
+       return res.status(200).send('Updated Successfully');
    
   
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -52,7 +52,7 @@ class UserRecipeController {
      
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -63,7 +63,7 @@ class UserRecipeController {
       res.status(200).send(userLiked)
     }catch(error){
       console.log(error)
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -77,7 +77,7 @@ class UserRecipeController {
       
      }catch(error){
       console.log(error)
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -91,7 +91,7 @@ class UserRecipeController {
     }
     catch(error){
       console.log(error)
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -106,7 +106,7 @@ class UserRecipeController {
     }
     catch(error){
       console.log(error)
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 }

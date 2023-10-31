@@ -12,8 +12,10 @@ var follow=db.Follow
 
 class RecipesRepository {
   async getRecipes(query) {
+    console.log(query)
     
     const search = query.search || "";
+    const page=query.page
     // console.log(search);
     const recipes = await Recipe.findAndCountAll({
       attributes: {
@@ -102,6 +104,8 @@ class RecipesRepository {
           // }
         },
       ],
+      limit:9,
+      offset: page ? (page - 1) * 9 : 0,
     });
 
     
@@ -168,7 +172,7 @@ class RecipesRepository {
     return { recipe, likesCount, commentsCount};
   }
 
-  async getRecipesByCategories(id) {
+  async getRecipesByCategories(id,page) {
     const recipes = await Recipe.findAndCountAll({
       attributes: {
         include: [
@@ -219,6 +223,8 @@ class RecipesRepository {
           attributes: ["id", "name"],
         },
       ],
+      limit:9,
+      offset: page ? (page - 1) * 9 : 0,
     });
 
     return recipes;

@@ -9,6 +9,7 @@ import Login from "../views/users/loginIn.vue";
 import SignUp from "../views/users/signUp.vue";
 import store from "../store/index";
 import userApi from "../services/users";
+import infiniteScroll from "../views/users/demoInfinite.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -51,6 +52,12 @@ const router = createRouter({
       name: "categoryRecipes",
       path: "/recipe/category/:categoryId",
       component: Recipes,
+      props: true,
+    },
+    {
+      
+      path: "/infiniteScroll",
+      component: infiniteScroll,
       props: true,
     },
     {

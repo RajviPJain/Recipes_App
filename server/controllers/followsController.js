@@ -6,6 +6,7 @@ class FollowsController {
       res.status(200).send(follower);
     } catch (error) {
       console.error(error);
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -15,6 +16,7 @@ class FollowsController {
       res.status(200).send(following);
     } catch (error) {
       console.error(error);
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -44,7 +46,7 @@ class FollowsController {
       res.status(200).send("unfollowed succesfully");
     } catch (error) {
       console.log(error);
-      res.send(error);
+      return res.status(500).send('Internal Server Error');
     }
   }
 }

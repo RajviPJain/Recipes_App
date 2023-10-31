@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     "follow",
     {
       followeeId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
       },
       followerId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
       },
     },
     {

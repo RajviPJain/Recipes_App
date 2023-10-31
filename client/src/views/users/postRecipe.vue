@@ -226,8 +226,15 @@ export default {
             this.dialog=false
             try {
               const response = await userRecipeapi.postRecipe(recipeDetails);
-              console.log('Response',response.data);
+              
               this.$emit('pushRecipe',response.data.recipe);
+              this.title=''
+              this.description=''
+              this.duration=''
+              this.serving=1
+              this.id=null
+              this.selectedIngredients=[]
+              this.imageurl=''
               this.$router.push('/user/myrecipes')
               
             } catch (error) {

@@ -1,11 +1,11 @@
 import api from './api'
 
 export default{
-    getRecipes(){
-        return api.get(`/recipe`)
+    getRecipes(page){
+        return api.get(`/recipe?page=${page}`)
     },
-    searchRecipes(search){
-        return api.get(`/recipe?search=${search}`)
+    searchRecipes(search,page){
+        return api.get(`/recipe?search=${search}&page=${page}`)
     },
 
     getRecipedetails(id){
@@ -21,7 +21,7 @@ export default{
     getCategories(){
         return api.get('recipe/category')
     },
-    getRecipesByCategory(categoryId){
-        return api.get(`recipe/category/${categoryId}`)
+    getRecipesByCategory(categoryId,page){
+        return api.get(`recipe/category/${categoryId}?page=${page}`)
     }
 }

@@ -12,16 +12,18 @@
                 height="240px"
                 cover
               >
-                <v-card-title
-                  class="text-white"
+                
+              </v-img>
+              
+            </v-list-item>
+
+            <v-card-actions >
+              <v-card-title
+                  class="text-dark font-weight-bold"
                   :v-text="recipe.title"
                   color="black"
                   >{{ recipe.title }}</v-card-title
                 >
-              </v-img>
-            </v-list-item>
-
-            <v-card-actions>
               <v-spacer></v-spacer>
               <v-spacer></v-spacer>
               <v-spacer></v-spacer>

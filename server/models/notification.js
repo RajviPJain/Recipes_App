@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
          
       },
         user_id:{
-            type:DataTypes.INTEGER,   
+            type:DataTypes.BIGINT,   
        
         },
         source_id:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.BIGINT,
         
         }
       },

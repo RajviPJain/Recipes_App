@@ -3,10 +3,10 @@ module.exports = (sequelize, DataTypes) => {
       "recipe_ingredient_qty",
       {
         recipe_id: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.BIGINT,
         },
        ingredient_id: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.BIGINT,
         },
        quantity: {
           type: DataTypes.STRING,

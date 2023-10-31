@@ -1,7 +1,13 @@
 <template>
   <v-row align="center" justify="center">
+    
     <h1 v-if="recipes.length === 0">No recipes</h1>
-    <v-col v-else v-for="recipe in recipes" :key="recipe.id" cols="auto">
+    <v-col
+      v-else
+      v-for="recipe in filteredRecipes"
+      :key="recipe.id"
+      cols="auto"
+    >
       <v-card
         :loading="loading"
         class="mx-auto my-4"
@@ -9,6 +15,7 @@
         variant="outlined"
         elevation="16"
       >
+     
         <template v-slot:loader="{ isActive }">
           <v-progress-linear
             :active="isActive"
@@ -31,8 +38,6 @@
 
             <v-list-item-title>{{ recipe.user.username }}</v-list-item-title>
           </v-list-item>
-
-
         </v-list-item>
 
         <v-img
@@ -79,14 +84,18 @@
           </v-list-item>
         </v-card-actions>
       </v-card>
+      
+    </v-col >
+    <v-col v-if="isEmpty" cols="12" sm="12" md="4">
+      <h3>No more recipes...</h3>
     </v-col>
+   
   </v-row>
 </template>
 
 <script>
 import recipeapi from "../../services/recipes";
 import userRecipeapi from "../../services/userRecipes";
-
 
 export default {
   props: ["categoryId"],
@@ -97,10 +106,12 @@ export default {
 
     delete: 0,
     add: 0,
- 
+
     search: "",
     liked_id: [],
-  
+    page: 1,
+
+    isEmpty: false,
   }),
 
   methods: {
@@ -110,61 +121,65 @@ export default {
       setTimeout(() => (this.loading = false), 2000);
     },
 
+
     async getRecipes() {
       try {
         if (this.categoryId) {
           const response = await recipeapi.getRecipesByCategory(
-            this.categoryId
+            this.categoryId,
+            this.page
           );
           this.recipes = response.data.rows;
         } else {
-          if(this.search){
-            const response = await recipeapi.searchRecipes(this.search);
-          this.recipes = response.data.rows;
+          if (this.search) {
+            const response = await recipeapi.searchRecipes(
+              this.search,
+              this.page
+            );
+            this.recipes = response.data.rows;
+          } else {
+            const response = await recipeapi.getRecipes(this.page);
+            console.log("Recipes", response.data.rows.length);
+            if (response.data.rows.length === 0) {
+              this.isEmpty = true;
+            } else {
+              this.recipes.push(...response.data.rows);
+            }
           }
-          else{
-            const response = await recipeapi.getRecipes();
-          this.recipes = response.data.rows;
-          console.log(this.recipes)
-          }
-          
-        
         }
       } catch (error) {
         console.log(error);
       }
     },
-    getisLogin(){
-       this.login=this.$store.getters["auth/getisLogin"]
-       return this.login
+    getisLogin() {
+      this.login = this.$store.getters["auth/getisLogin"];
+      return this.login;
     },
     async getuserLikedRecipes() {
-      if(this.getisLogin()){
+      if (this.getisLogin()) {
         try {
-        const response = await userRecipeapi.getuserLikedRecipes();
+          const response = await userRecipeapi.getuserLikedRecipes();
 
-        this.liked_id = response.data.map((item) => item.recipeId);
-        console.log(this.liked_id);
-      } catch (error) {
-        console.log(error);
+          this.liked_id = response.data.map((item) => item.recipeId);
+          console.log(this.liked_id);
+        } catch (error) {
+          console.log(error);
+        }
       }
-      }
- 
     },
 
     async like(recipeId) {
       console.log(recipeId, "liked");
       try {
         await userRecipeapi.postLike(recipeId);
-        
+
         this.liked_id.push(recipeId);
         this.recipes = this.recipes.map((recipe) => {
-            if (recipe.id === recipeId) {
-              return { ...recipe, likeCount: parseInt(recipe.likeCount) + 1 };
-            }
-            return recipe;
-          })
-
+          if (recipe.id === recipeId) {
+            return { ...recipe, likeCount: parseInt(recipe.likeCount) + 1 };
+          }
+          return recipe;
+        });
       } catch (error) {
         console.log(error);
       }
@@ -175,19 +190,40 @@ export default {
         console.log(response);
         this.liked_id = this.liked_id.filter((like) => like !== recipeId);
         this.recipes = this.recipes.map((recipe) => {
-            if (recipe.id === recipeId) {
-              return { ...recipe, likeCount: parseInt(recipe.likeCount) - 1 };
-            }
-            return recipe;
-          })
+          if (recipe.id === recipeId) {
+            return { ...recipe, likeCount: parseInt(recipe.likeCount) - 1 };
+          }
+          return recipe;
+        });
       } catch (error) {
         console.log(error);
       }
     },
-
+  },
+  computed: {
+    filteredRecipes() {
+      return this.recipes;
+    },
   },
   created() {
-    this.getRecipes();
+    window.addEventListener("beforeunload", () => {
+      window.scrollTo(0, 0);
+    });
+    window.onscroll = () => {
+      let bottomOfWindow =
+        document.documentElement.scrollTop + window.innerHeight >=
+        document.documentElement.offsetHeight;
+
+      console;
+      if (bottomOfWindow) {
+        console.log("bottom", bottomOfWindow);
+        if (!this.isEmpty) {
+          this.page++;
+          this.getRecipes(this.page);
+        }
+      }
+    };
+    this.getRecipes(this.page);
     this.getuserLikedRecipes();
   },
   watch: {

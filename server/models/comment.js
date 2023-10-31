@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
          
       },
         recipeId:{
-            type:DataTypes.INTEGER,   
+            type:DataTypes.BIGINT,   
        
         },
         userId:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.BIGINT,
         
         }
       },

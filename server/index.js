@@ -10,6 +10,7 @@ app.use(
   cors({
     origin: "http://localhost:8080",
     credentials: true,
+  
   })
 );
 require("dotenv").config();
@@ -20,7 +21,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {  maxAge: 3600000,secure: false },
+    cookie: {  maxAge: 3600000,secure: false, httpOnly: false },
   })
 );
 

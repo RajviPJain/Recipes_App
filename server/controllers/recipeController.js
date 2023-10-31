@@ -8,17 +8,18 @@ class RecipeController {
       return res.status(200).json(recipeDetail);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
   async getAllRecipe(req, res) {
     try {
+
       const recipesDetails = await RecipeService.getRecipes(req.query);
       return res.status(200).json(recipesDetails);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -26,12 +27,12 @@ class RecipeController {
     try {
       console.log(req.params.category_id);
       const recipesDetails = await RecipeService.getRecipeByCategory(
-        req.params.category_id
+        req.params.category_id,req.query.page
       );
       return res.status(200).json(recipesDetails);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -46,7 +47,7 @@ class RecipeController {
 
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -56,7 +57,7 @@ class RecipeController {
       return res.status(200).json(categories);
     } catch (error) {
       // console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
   async getLikeUsers(req, res) {
@@ -66,7 +67,7 @@ class RecipeController {
       return res.status(200).json(Users);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -76,7 +77,7 @@ class RecipeController {
       return res.status(200).json(like);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -87,7 +88,7 @@ class RecipeController {
       return res.status(200).json(comments);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 
@@ -102,7 +103,7 @@ class RecipeController {
       return res.status(200).json(comment);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
   async unlike(req, res) {
@@ -111,7 +112,7 @@ class RecipeController {
       return res.status(200).json(unlike);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
   async deleteComment(req, res) {
@@ -121,13 +122,13 @@ class RecipeController {
         const deleteComment = await RecipeService.deleteComment(
           req.params.comment_id
         );
-        return res.status(200).json(deleteComment);
+        return res.status(200).json('Deleted Successfully');
  
   
    
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(500).send('Internal Server Error');
     }
   }
 }

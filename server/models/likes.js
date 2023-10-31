@@ -4,12 +4,12 @@ module.exports = (sequelize, DataTypes) => {
       "like",
       { 
         userId:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.BIGINT,
                
        
         },
         recipeId:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.BIGINT,
         
         }
       },

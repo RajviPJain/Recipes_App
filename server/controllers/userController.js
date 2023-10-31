@@ -15,7 +15,7 @@ class UserController {
       res.redirect(redirectUrlWithToken);
     } catch (error) {
       console.log(error);
-      return res.status(500).json("Please Register");
+      return res.status(500).send(error.message);
     }
   }
 
@@ -33,12 +33,13 @@ class UserController {
 
       res.redirect(redirectUrlWithToken);
     } catch (error) {
-      return res.status(401).json("Invalid");
+      return res.status(500).send(error.message);
     }
   }
 
   async getUser(req, res) {
     try {
+      console.log('Req',req.user)
       const userId = req.user.id;
       const user = await UserService.getUser(userId);
       return res.status(200).json(user);
@@ -67,13 +68,16 @@ class UserController {
   }
 
   async verifyPassword(req,res){
-     try{
+     try{ 
+        
         console.log('Inside Controller')
         const verifyPassword=await UserService.verifyPassword(req.body.userdata)
+        console.log(verifyPassword)
         return res.status(200).json(verifyPassword);
      }
      catch(error){
-      return res.status(500).json({ error });
+      console.log("error",error.message)
+      return res.status(500).send(error.message);
      }
   }
 
@@ -84,7 +88,7 @@ class UserController {
       });
     } catch (e) {
       console.log(e);
-      res.send("No token");
+      res.status(500).send("No token");
     }
   }
 }
