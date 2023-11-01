@@ -73,12 +73,14 @@
               <v-col cols="12" sm="12" md="4">
                 <v-chip
                   closable
+                  
                   v-for="(ingredient, index) in selectedIngredients"
                   :key="index"
                   @click:closable="removeIngredient(index)"
                 >
                   {{ ingredient.name }} ({{ ingredient.quantity }})
                 </v-chip>
+               <span v-if="v$.selectedIngredients.$error" class="text-red-darken-4">Ingredients are required</span>
               </v-col>
               <v-col cols="12" sm="12" md="12">
                 <v-textarea
@@ -182,6 +184,9 @@ export default {
         quantity:{
           minLength:minLength(1),
         }
+      },
+      selectedIngredients:{
+       required
       }
     }
   },
@@ -222,11 +227,10 @@ export default {
                 imageurl:this.imageurl
               },
             };
-            console.log(recipeDetails);
-            this.dialog=false
+         
             try {
               const response = await userRecipeapi.postRecipe(recipeDetails);
-              
+              console.log(response.data)
               this.$emit('pushRecipe',response.data.recipe);
               this.title=''
               this.description=''
@@ -235,10 +239,12 @@ export default {
               this.id=null
               this.selectedIngredients=[]
               this.imageurl=''
+              this.$toast.success('Posted Recipe Successfully');
               this.$router.push('/user/myrecipes')
               
             } catch (error) {
               console.log(error);
+              this.$toast.error(error.response.data.error);
             }
         }
     },

@@ -24,6 +24,7 @@ class UserService{
         const existingUser=await UsersRepository.findUserByEmail(userdata)
         const existingUsername=await UsersRepository.findUserByUsername(userdata)
         if(existingUser.length!==0 || existingUsername.length!==0){
+          res.status(401);
            throw new Error('User already exists')
         }
         

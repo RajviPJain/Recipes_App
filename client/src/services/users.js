@@ -12,10 +12,12 @@ export default {
   },
 
   unfollow(id) {
+    console.log(id)
     return api.delete(`follows/${id}/unfollow`);
   },
 
   removeFollower(id) {
+    console.log(id)
     return api.delete(`follows/${id}/follower`);
   },
 

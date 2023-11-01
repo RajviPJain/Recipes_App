@@ -24,7 +24,13 @@
         }}</v-card-title>
         <v-divider></v-divider>
 
-        <v-list v-for="item in items" :key="item.id">
+        <v-card-text v-if="isFollowerEmpty">
+            No followers
+        </v-card-text>
+        <v-card-text v-else-if="isFollowingEmpty">
+            No following
+        </v-card-text>
+        <v-list v-for="item in items" :key="item.id" v-else>
           <v-list-item>
             <template v-slot:prepend>
               <v-list-item :to="'/recipe/user/' + item.id" class="px-0"
@@ -66,7 +72,7 @@
 <script>
 import userapi from "../../services/users";
 export default {
-  props: ["type"],
+  props: ["type","followerCount","followingCount"],
   data() {
     return {
       dialogm1: "",
@@ -74,29 +80,46 @@ export default {
       items: [],
       followers: [],
       following: [],
+
+      isFollowerEmpty:false,
+      isFollowingEmpty:false
     };
   },
   methods: {
     async getList() {
+     
       if (this.type === "followers") {
-        try{
-          const response = await userapi.getFollowers();
-        console.log(response);
-        this.items = response.data;
-        
+    
+        if(this.followerCount!=='0'){
+
+          try{
+            const response = await userapi.getFollowers();
+          console.log(response);
+  
+          this.items = response.data;
+          
+          }
+          catch(error){
+            this.$toast.error(error.response.data.error);
+          }
         }
-        catch(error){
-          console.log(error)
+        else{
+           this.isFollowerEmpty=true
         }
 
       } else {
-        try{
-          const response = await userapi.getFollowing();
-        console.log(response);
-        this.items = response.data;
-        }
-        catch(error){
-          console.log(error)
+        if(this.followingCount!=='0'){
+
+          try{
+            const response = await userapi.getFollowing();
+          console.log(response);
+          this.items = response.data;
+          }
+          catch(error){
+            this.$toast.error(error.response.data.error);
+          }
+        }else{
+          this.isFollowingEmpty=true
         }
   
       }
@@ -104,26 +127,28 @@ export default {
 
     async removeFollower(id){
         try{
+            console.log(id)
             
             const response=await userapi.removeFollower(id)
             console.log(response)
             this.items=this.items.filter((item)=>item.id!==id)
+            this.$toast.success(response.data);
             this.$emit('count',this.items.length)
         }
         catch(error){
-          console.log(error)
+          this.$toast.error(error.response.data.error);
         }
     },
     async unfollow(id){
         try{
           console.log(id)
             const response=await userapi.unfollow(id)
-            console.log(response)
+            this.$toast.success(response.data);
             this.items=this.items.filter((item)=>item.id!==id)
             this.$emit('count',this.items.length)
         }
         catch(error){
-          console.log(error)
+          this.$toast.error(error.response.data.error);
         }
     }
   },

@@ -116,6 +116,7 @@ export default {
         this.isFollowing=response.data.isFollowing
       } catch (error) {
         console.log(error);
+       this.$toast.error(error.response.data.error);
       }
     },
     async getuserLikedRecipes() {
@@ -126,6 +127,7 @@ export default {
         console.log(this.liked_id);
       } catch (error) {
         console.log(error);
+       this.$toast.error(error.response.data.error);
       }
     },
     async like(recipeId) {
@@ -142,6 +144,7 @@ export default {
         });
       } catch (error) {
         console.log(error);
+       this.$toast.error(error.response.data.error);
       }
     },
     async unlike(recipeId) {
@@ -159,6 +162,7 @@ export default {
         });
       } catch (error) {
         console.log(error);
+       this.$toast.error(error.response.data.error);
       }
     },
 
@@ -166,11 +170,15 @@ export default {
       try{
          const follow=await userapi.follow(id)
          console.log(follow)
+         this.$toast.success(
+              "Followed Successfully"
+            );
          this.followerCount++
          this.isFollowing=true
       }
       catch(error){
         console.log(error)
+       this.$toast.error(error.response.data.error);
       }
     },
 
@@ -180,11 +188,15 @@ export default {
         console.log('hi')
          const unfollow=await userapi.unfollow(id)
          console.log(unfollow)
+         this.$toast.success(
+              "Unfollowed Successfully"
+            );
          this.followerCount--
          this.isFollowing=false
       }
       catch(error){
         console.log(error)
+       this.$toast.error(error.response.data.error);
       }
     }
   },

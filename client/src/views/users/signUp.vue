@@ -57,15 +57,15 @@
           </v-col>
 
           <v-col cols="12" sm="12" md="12">
-                <v-text-field
-                  prepend-inner-icon="mdi-camera"
-                  accept="image/*"
-                  label="Image Url*"
-                  :error-messages="v$.imageurl.$errors.map((e) => e.$message)"
-          v-model="v$.imageurl.$model"
+            <v-text-field
+              prepend-inner-icon="mdi-camera"
+              accept="image/*"
+              label="Image Url*"
+              :error-messages="v$.imageurl.$errors.map((e) => e.$message)"
+              v-model="v$.imageurl.$model"
               @input="v$.imageurl.$touch"
-                ></v-text-field>
-              </v-col>
+            ></v-text-field>
+          </v-col>
         </v-row>
 
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
@@ -133,6 +133,15 @@
           Sign Up
         </v-btn>
 
+        <v-btn
+          block
+          class="mb-4"
+          color="black"
+          size="large"
+          variant="tonal"
+          @click="googleAuth()"
+          >Sign up with google</v-btn
+        >
         <v-card-text class="text-center">
           <v-btn class="text-black text-decoration-none" to="/login">
             Log In now
@@ -146,8 +155,8 @@
 
 <script>
 import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength, sameAs,url } from "@vuelidate/validators";
-import userApi from "../../services/users"
+import { required, email, minLength, sameAs, url } from "@vuelidate/validators";
+import userApi from "../../services/users";
 
 export default {
   setup() {
@@ -163,7 +172,7 @@ export default {
     email: "",
     password: "",
     confirmPassword: "",
-    imageurl:""
+    imageurl: "",
   }),
   validations() {
     return {
@@ -188,8 +197,8 @@ export default {
         required,
         sameAs: sameAs(this.password),
       },
-      imageurl:{
-            url
+      imageurl: {
+        url,
       },
     };
   },
@@ -203,15 +212,14 @@ export default {
           userdetails: {
             firstname: this.firstName,
             lastname: this.lastName,
-            username:this.userName,
+            username: this.userName,
             email: this.email,
             password: this.password,
             about: this.about,
             imageurl: this.imageurl,
           },
-
         };
-        console.log(params)
+        console.log(params);
         try {
           const response = await userApi.registerUser(params);
 
@@ -225,12 +233,22 @@ export default {
             });
             this.user = this.$store.getters["auth/getUserId"];
 
+            this.$toast.success("Register Successfull");
+
             this.$router.push({ path: "/" });
           }
         } catch (error) {
           console.log(error);
-
+          this.$toast.error(error.response.data.error);
         }
+      }
+    },
+    async googleAuth() {
+      try {
+        window.location.href = "http://localhost:3000/users/auth/google";
+        this.$toast.success("Login Successfull");
+      } catch (error) {
+        console.log(error);
       }
     },
   },

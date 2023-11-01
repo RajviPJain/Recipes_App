@@ -9,17 +9,11 @@ import Login from "../views/users/loginIn.vue";
 import SignUp from "../views/users/signUp.vue";
 import store from "../store/index";
 import userApi from "../services/users";
-import infiniteScroll from "../views/users/demoInfinite.vue"
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: "/", redirect: "/recipe" },
-    {
-      name: "recipe",
-      path: "/recipe",
-      component: Recipes,
-    },
     {
       name: "login",
       path: "/login",
@@ -28,6 +22,13 @@ const router = createRouter({
         requiresUnauth: true,
       },
     },
+    { path: "/", redirect: "/recipe" },
+    {
+      name: "recipe",
+      path: "/recipe",
+      component: Recipes,
+    },
+ 
     {
       name: "signup",
       path: "/signUp",
@@ -52,12 +53,6 @@ const router = createRouter({
       name: "categoryRecipes",
       path: "/recipe/category/:categoryId",
       component: Recipes,
-      props: true,
-    },
-    {
-      
-      path: "/infiniteScroll",
-      component: infiniteScroll,
       props: true,
     },
     {

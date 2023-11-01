@@ -24,8 +24,8 @@ class RecipeService{
         return recipeDetail
       }
 
-      async getUserRecipes(id){
-        const recipeDetail= await RecipesRepository.getUserRecipes(id)
+      async getUserRecipes(id,userId){
+        const recipeDetail= await RecipesRepository.getUserRecipes(id,userId)
       
         return recipeDetail
       }

@@ -114,10 +114,12 @@ export default {
       return this.login;
     },
     async logout() {
+      console.log('logout')
       await userApi.logout();
       await this.$store.commit("auth/setLogout");
 
       this.getisLogin();
+   
       this.$router.push({ path: "/login" });
     },
   },

@@ -24,14 +24,17 @@ userRouter.get(
 
 userRouter.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] }),
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
+
+
 userRouter.get(
   "/auth/google/authcallback",
   passport.authenticate("google", {
     failureRedirect: "/users/auth/google",
   }),  (req, res) => {
-    res.status(200).send({ message: "Login Successful", user: req.user });
+     
+    res.redirect('http://localhost:8080')
   }
 );
 

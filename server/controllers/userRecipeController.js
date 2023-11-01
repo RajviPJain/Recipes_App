@@ -2,30 +2,30 @@ const UserRecipeService = require("../services/userRecipeService");
 const RecipeService = require("../services/recipeService");
 
 class UserRecipeController {
-  async getRecipe(req, res) {
+  async getRecipe(req, res,next) {
     try {
      
-      const recipesDetails = await RecipeService.getUserRecipes(req.user.id);
+      const recipesDetails = await RecipeService.getUserRecipes(req.user.id,req.user.id);
       return res.status(200).json(recipesDetails);
     } catch (error) {
       console.log(error);
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
-  async postRecipe(req, res) {
+  async postRecipe(req, res,next) {
     try {
      
       const recipe = await UserRecipeService.postRecipes(
         req.body.recipe,
         req.user.id
       );
-      return res.status(200).json('Posted Successfully');
+      return res.status(200).json(recipe);
     } catch (error) {
       console.log(error);
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
-  async updateRecipe(req, res) {
+  async updateRecipe(req, res,next) {
     try {
     
         const updatedRecipe = await UserRecipeService.updateRecipe(
@@ -37,11 +37,11 @@ class UserRecipeController {
   
     } catch (error) {
       console.error(error);
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 
-  async deleteRecipe(req, res) {
+  async deleteRecipe(req, res,next) {
     try {
 
         const deletedRecipe = await UserRecipeService.deleteRecipe(
@@ -52,22 +52,22 @@ class UserRecipeController {
      
     } catch (error) {
       console.log(error);
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 
-  async userLikedRecipe(req,res){
+  async userLikedRecipe(req,res,next){
     try{
 
       const userLiked=await UserRecipeService.getUserLikedRecipe(req.user.id)
       res.status(200).send(userLiked)
     }catch(error){
       console.log(error)
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 
-  async deleteIngredient(req,res){
+  async deleteIngredient(req,res,next){
      try{
       
             const deleteIngredient=await UserRecipeService.deleteIngredient(req.params.ingredient_id)
@@ -77,11 +77,11 @@ class UserRecipeController {
       
      }catch(error){
       console.log(error)
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 
-  async addIngredient(req,res){
+  async addIngredient(req,res,next){
     try{
      
         const addIngredient=await UserRecipeService.addIngredient(req.body.ingredient,req.params.recipe_id)
@@ -91,11 +91,11 @@ class UserRecipeController {
     }
     catch(error){
       console.log(error)
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 
-  async updateIngredient(req,res){
+  async updateIngredient(req,res,next){
     try{
       
             
@@ -106,7 +106,7 @@ class UserRecipeController {
     }
     catch(error){
       console.log(error)
-      return res.status(500).send('Internal Server Error');
+      next(error);
     }
   }
 }

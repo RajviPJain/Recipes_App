@@ -1,6 +1,6 @@
 const UserService = require("../services/userService");
 class UserController {
-  async register(req, res) {
+  async register(req, res,next) {
     try {
       const data = await UserService.registerUser(req.body.userdetails);
 
@@ -15,11 +15,11 @@ class UserController {
       res.redirect(redirectUrlWithToken);
     } catch (error) {
       console.log(error);
-      return res.status(500).send(error.message);
+      next(error);
     }
   }
 
-  async login(req, res) {
+  async login(req, res,next) {
     try {
       const data = await UserService.login(req.body.userdetails);
 
@@ -33,11 +33,11 @@ class UserController {
 
       res.redirect(redirectUrlWithToken);
     } catch (error) {
-      return res.status(500).send(error.message);
+      next(error);
     }
   }
 
-  async getUser(req, res) {
+  async getUser(req, res,next) {
     try {
       console.log('Req',req.user)
       const userId = req.user.id;
@@ -45,29 +45,29 @@ class UserController {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      next(error);
     }
   }
-  async updateUser(req, res) {
+  async updateUser(req, res,next) {
     try {
       const user = await UserService.updateUser(req.body.userdata);
       return res.status(200).json("Updated Successfully");
     } catch (error) {
-      return res.status(500).json({ error });
+      next(error);
     }
   }
 
-  async updatePassword(req, res) {
+  async updatePassword(req, res,next) {
     try {
    
       const updatedPassword = await UserService.updatePassword(req.body.userdata);
       return res.status(200).json("Updated Successfully");
     } catch (error) {
-      return res.status(500).json({ error });
+      next(error);
     }
   }
 
-  async verifyPassword(req,res){
+  async verifyPassword(req,res,next){
      try{ 
         
         console.log('Inside Controller')
@@ -77,18 +77,18 @@ class UserController {
      }
      catch(error){
       console.log("error",error.message)
-      return res.status(500).send(error.message);
+      next(error);
      }
   }
 
-  async logout(req, res) {
+  async logout(req, res,next) {
     try {
       req.logout(() => {
         res.send("Logout");
       });
     } catch (e) {
       console.log(e);
-      res.status(500).send("No token");
+      next(error);
     }
   }
 }

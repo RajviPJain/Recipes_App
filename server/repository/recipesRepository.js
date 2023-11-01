@@ -108,9 +108,11 @@ class RecipesRepository {
       offset: page ? (page - 1) * 9 : 0,
     });
 
+    const recipeCount = await Recipe.count();
+
     
 
-    return recipes;
+    return {recipes,recipeCount};
   }
 
   async getCategories(){
@@ -173,6 +175,7 @@ class RecipesRepository {
   }
 
   async getRecipesByCategories(id,page) {
+    console.log
     const recipes = await Recipe.findAndCountAll({
       attributes: {
         include: [
@@ -227,10 +230,16 @@ class RecipesRepository {
       offset: page ? (page - 1) * 9 : 0,
     });
 
-    return recipes;
+    const recipeCount = await Recipe.count({
+       where:{
+        category_id: id,
+       }
+    });
+
+    return {recipes,recipeCount};
   }
 
-  async getUserRecipes(id) {
+  async getUserRecipes(id,userId) {
  
     const recipes = await Recipe.findAndCountAll({
       attributes: {
@@ -299,7 +308,7 @@ class RecipesRepository {
     })
     const Following=await follow.findAll({
       where:{
-        followerId:2,
+        followerId:userId,
         followeeId:id
       } 
     })

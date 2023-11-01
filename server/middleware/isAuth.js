@@ -4,7 +4,9 @@ const isAuthenticated = async (req, res, next) => {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.status(401).send("Please Authenticate"); // Redirect to login if not authenticated
+    
+    res.status(403);
+    next(new Error("Please Authenticate")); // Redirect to login if not authenticated
   };
   
 module.exports = isAuthenticated;

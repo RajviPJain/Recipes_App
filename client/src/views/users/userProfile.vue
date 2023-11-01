@@ -17,11 +17,11 @@
         </template>
 
         <v-card-actions>
-          <followerComponent type="followers" @count="addFollowerCount">{{
+          <followerComponent type="followers" :followerCount="followerCount" @count="addFollowerCount">{{
             followerCount
           }}</followerComponent>
           <v-spacer></v-spacer>
-          <followerComponent type="following" @count="addFollowingCount">{{
+          <followerComponent type="following" :followingCount="followingCount" @count="addFollowingCount">{{
             followingCount
           }}</followerComponent>
           <v-spacer></v-spacer>
@@ -182,6 +182,7 @@ export default {
   setup() {
     return { v$: useVuelidate() };
   },
+  
   data() {
     return {
       editMode: false,
@@ -240,11 +241,9 @@ export default {
   },
   methods: {
     async addFollowerCount(count) {
-      console.log(count);
       this.followerCount = count;
     },
     async addFollowingCount(count) {
-      console.log(count);
       this.followingCount = count;
     },
     async getUserProfile() {
@@ -260,6 +259,7 @@ export default {
         this.user.imageurl = response.data.imageurl;
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
     async submit() {
@@ -274,11 +274,15 @@ export default {
         };
         try {
           const response = await userapi.updateUser(params);
+         
           if (response.status === 200) {
+            this.$toast.success('Updated Successfully');
             this.editMode = false;
+          this.verifiedPassword = false;
           }
         } catch (error) {
           console.log(error);
+          this.$toast.error(error.response.data.error);
         }
       }
     },
@@ -299,9 +303,11 @@ export default {
         if (response.status === 200) {
           this.dialog = false;
           this.verifiedPassword = true;
+
         }
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
 
@@ -320,8 +326,10 @@ export default {
         const response = await userapi.updatePassword(params);
         console.log(response);
         this.verifiedPassword = false;
+        this.$toast.success('Password Updated Successfully');
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
   },

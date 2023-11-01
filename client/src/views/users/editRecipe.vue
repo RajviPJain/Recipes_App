@@ -56,8 +56,8 @@
                   item-value="id"
                   label="Category*"
                   :error-messages="v$.id.$errors.map((e) => e.$message)"
-          v-model="v$.id.$model"
-              @input="v$.id.$touch"
+                  v-model="v$.id.$model"
+                  @input="v$.id.$touch"
                 ></v-select>
               </v-col>
 
@@ -88,9 +88,11 @@
 
                 <h2>Add or Update Ingredient</h2>
                 <v-text-field
-                :error-messages="v$.newIngredient.$errors.map((e) => e.$message)"
-          v-model="v$.newIngredient.$model"
-              @input="v$.newIngredient.$touch"
+                  :error-messages="
+                    v$.newIngredient.$errors.map((e) => e.$message)
+                  "
+                  v-model="v$.newIngredient.$model"
+                  @input="v$.newIngredient.$touch"
                   label="Ingredient Name"
                 ></v-text-field>
                 <v-text-field
@@ -102,14 +104,16 @@
                   >Update Quantity</v-btn
                 >
               </v-col>
-
+              <span v-if="v$.existingIngredients.$error" class="text-red-darken-4">Ingredients are required</span>
               <v-col cols="12" sm="12" md="12">
                 <v-textarea
                   prepend-icon="mdi-file-document-edit"
                   label="Procedure*"
-                  :error-messages="v$.description.$errors.map((e) => e.$message)"
-          v-model="v$.description.$model"
-              @input="v$.description.$touch"
+                  :error-messages="
+                    v$.description.$errors.map((e) => e.$message)
+                  "
+                  v-model="v$.description.$model"
+                  @input="v$.description.$touch"
                 ></v-textarea>
               </v-col>
               <v-col cols="12" sm="12" md="12">
@@ -118,8 +122,8 @@
                   accept="image/*"
                   label="Update image url"
                   :error-messages="v$.imageurl.$errors.map((e) => e.$message)"
-          v-model="v$.imageurl.$model"
-              @input="v$.imageurl.$touch"
+                  v-model="v$.imageurl.$model"
+                  @input="v$.imageurl.$touch"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -149,7 +153,6 @@ import {
   maxLength,
   url,
   integer,
-  
 } from "@vuelidate/validators";
 
 export default {
@@ -174,10 +177,12 @@ export default {
     newQuantity: null,
     editIndex: -1,
   }),
-  beforeRouteLeave () {
-  const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-  if (!answer) return false
-},
+  beforeRouteLeave() {
+    const answer = window.confirm(
+      "Do you really want to leave? you have unsaved changes!"
+    );
+    if (!answer) return false;
+  },
   validations() {
     return {
       title: {
@@ -191,7 +196,6 @@ export default {
       },
       duration: {
         required,
-        
       },
       serving: {
         required,
@@ -206,12 +210,14 @@ export default {
       newIngredient: {
         minLength: minLength(3),
       },
+      existingIngredients:{
+        required
+      }
     };
   },
   methods: {
     async getCategories() {
-     
-      this.items = this.$store.getters['category/getCategories']
+      this.items = this.$store.getters["category/getCategories"];
     },
     async getRecipe() {
       try {
@@ -224,12 +230,12 @@ export default {
         this.serving = this.recipe.serving;
         this.imageurl = this.recipe.image_url;
         this.existingIngredients = this.recipe.recipe_ingredient_qties;
-        this.id=this.recipe.category_id
-
+        this.id = this.recipe.category_id;
 
         console.log(response);
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
 
@@ -257,6 +263,7 @@ export default {
         this.editIndex = -1;
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
     editIngredient(index, id) {
@@ -268,7 +275,6 @@ export default {
     },
     async saveIngredient(recipeId) {
       try {
-        console.log(this.ingredientId);
         const params = {
           ingredient: {
             name: this.newIngredient,
@@ -291,6 +297,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
     async deleteIngredient(index, ingredientId) {
@@ -299,36 +306,41 @@ export default {
         console.log(response);
         this.existingIngredients.splice(index, 1);
       } catch (error) {
-        console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
 
     async updateRecipe(recipeId) {
-      this.v$.$touch()
-        if(!this.v$.$invalid){
-          try {
-        const params = {
-          recipe_details: {
-            title: this.title,
-            description: this.description,
-            duration: this.duration,
-            serving: this.serving,
-            imageurl: this.imageurl,
-            category_id:this.id
-          },
-        };
-        const response = await userRecipeapi.updateRecipe(recipeId, params);
-        console.log(response);
-      } catch (error) {
-        console.log(error);
-      }
-        }
+      this.v$.$touch();
+      if (!this.v$.$invalid) {
+        try {
+          const params = {
+            recipe_details: {
+              title: this.title,
+              description: this.description,
+              duration: this.duration,
+              serving: this.serving,
+              imageurl: this.imageurl,
+              category_id: this.id,
+            },
+          };
+          const response = await userRecipeapi.updateRecipe(recipeId, params);
+          console.log(response);
+          this.dialog = false;
 
-    
+
+          this.$emit('updatedField',params.recipe_details,recipeId)
+        
+          this.$toast.success(response.data);
+        } catch (error) {
+          console.log(error)
+          this.$toast.error(error.response.data.error);
+        }
+      }
     },
   },
-  created(){
-    this.getCategories()
-  }
+  created() {
+    this.getCategories();
+  },
 };
 </script>

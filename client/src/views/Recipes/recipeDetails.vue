@@ -110,6 +110,7 @@ export default {
         this.commentsCount = response.data.commentsCount;
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
     async sendComment(recipeId) {
@@ -125,6 +126,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
     clearComment() {
@@ -138,6 +140,7 @@ export default {
         this.comments = response.data;
       } catch (error) {
         console.log(error);
+        this.$toast.error(error.response.data.error);
       }
     },
   },
